@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "grpcProxyChart.fullname" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "grpcProxyChart.name" . }}
+    helm.sh/chart: {{ include "grpcProxyChart.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - name: rpc
+      port: {{ .Values.service.rpcPort }}
+      targetPort: rpc
+    - name: rest
+      port: {{ .Values.service.restPort }}
+      targetPort: rest
+  selector:
+    app.kubernetes.io/name: {{ include "grpcProxyChart.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
